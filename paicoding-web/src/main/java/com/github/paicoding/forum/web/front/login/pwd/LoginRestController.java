@@ -1,11 +1,7 @@
 package com.github.paicoding.forum.web.front.login.pwd;
 
-import com.github.paicoding.forum.api.model.context.ReqInfoContext;
+import com.github.paicoding.forum.api.model.constants.StatusEnum;
 import com.github.paicoding.forum.api.model.vo.ResVo;
-import com.github.paicoding.forum.api.model.vo.constants.StatusEnum;
-import com.github.paicoding.forum.api.model.vo.user.UserPwdLoginReq;
-import com.github.paicoding.forum.core.permission.Permission;
-import com.github.paicoding.forum.core.permission.UserRole;
 import com.github.paicoding.forum.core.util.SessionUtil;
 import com.github.paicoding.forum.service.user.service.LoginService;
 import org.apache.commons.lang3.StringUtils;
@@ -29,8 +25,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping
 public class LoginRestController {
-    @Autowired
-    private LoginService loginService;
+//    @Autowired
+//    private LoginService loginService;
 
     /**
      * 用户名和密码登录
@@ -40,46 +36,48 @@ public class LoginRestController {
     public ResVo<Boolean> login(@RequestParam(name = "username") String username,
                                 @RequestParam(name = "password") String password,
                                 HttpServletResponse response) {
-        String session = loginService.loginByUserPwd(username, password);
-        if (StringUtils.isNotBlank(session)) {
-            // cookie中写入用户登录信息，用于身份识别
-            response.addCookie(SessionUtil.newCookie(LoginService.SESSION_KEY, session));
-            return ResVo.ok(true);
-        } else {
-            return ResVo.fail(StatusEnum.LOGIN_FAILED_MIXED, "用户名和密码登录异常，请稍后重试");
-        }
+//        String session = loginService.loginByUserPwd(username, password);
+//        if (StringUtils.isNotBlank(session)) {
+//            // cookie中写入用户登录信息，用于身份识别
+//            response.addCookie(SessionUtil.newCookie(LoginService.SESSION_KEY, session));
+//            return ResVo.ok(true);
+//        } else {
+//            return ResVo.fail(StatusEnum.LOGIN_FAILED_MIXED, "用户名和密码登录异常，请稍后重试");
+//        }
+        System.out.println("=====进入登录方法======");
+        return ResVo.ok(true);
     }
 
     /**
      * 绑定星球账号
      */
-    @PostMapping("/login/register")
-    public ResVo<Boolean> register(UserPwdLoginReq loginReq,
-                                   HttpServletResponse response) {
-        String session = loginService.registerByUserPwd(loginReq);
-        if (StringUtils.isNotBlank(session)) {
-            // cookie中写入用户登录信息，用于身份识别
-            response.addCookie(SessionUtil.newCookie(LoginService.SESSION_KEY, session));
-            return ResVo.ok(true);
-        } else {
-            return ResVo.fail(StatusEnum.LOGIN_FAILED_MIXED, "用户名和密码登录异常，请稍后重试");
-        }
-    }
-
-    @Permission(role = UserRole.LOGIN)
-    @RequestMapping("logout")
-    public ResVo<Boolean> logOut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // 释放会话
-        request.getSession().invalidate();
-        Optional.ofNullable(ReqInfoContext.getReqInfo()).ifPresent(s -> loginService.logout(s.getSession()));
-        // 移除cookie
-        response.addCookie(SessionUtil.delCookie(LoginService.SESSION_KEY));
-        // 重定向到当前页面
-        String referer = request.getHeader("Referer");
-        if (StringUtils.isBlank(referer)) {
-            referer = "/";
-        }
-        response.sendRedirect(referer);
-        return ResVo.ok(true);
-    }
+//    @PostMapping("/login/register")
+//    public ResVo<Boolean> register(UserPwdLoginReq loginReq,
+//                                   HttpServletResponse response) {
+//        String session = loginService.registerByUserPwd(loginReq);
+//        if (StringUtils.isNotBlank(session)) {
+//            // cookie中写入用户登录信息，用于身份识别
+//            response.addCookie(SessionUtil.newCookie(LoginService.SESSION_KEY, session));
+//            return ResVo.ok(true);
+//        } else {
+//            return ResVo.fail(StatusEnum.LOGIN_FAILED_MIXED, "用户名和密码登录异常，请稍后重试");
+//        }
+//    }
+//
+//    @Permission(role = UserRole.LOGIN)
+//    @RequestMapping("logout")
+//    public ResVo<Boolean> logOut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        // 释放会话
+//        request.getSession().invalidate();
+//        Optional.ofNullable(ReqInfoContext.getReqInfo()).ifPresent(s -> loginService.logout(s.getSession()));
+//        // 移除cookie
+//        response.addCookie(SessionUtil.delCookie(LoginService.SESSION_KEY));
+//        // 重定向到当前页面
+//        String referer = request.getHeader("Referer");
+//        if (StringUtils.isBlank(referer)) {
+//            referer = "/";
+//        }
+//        response.sendRedirect(referer);
+//        return ResVo.ok(true);
+//    }
 }

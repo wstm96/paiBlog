@@ -1,6 +1,5 @@
 package com.github.paicoding.forum.api.model.vo.article;
 
-import com.github.paicoding.forum.api.model.enums.column.ColumnArticleReadEnum;
 import lombok.Data;
 
 import java.io.Serializable;

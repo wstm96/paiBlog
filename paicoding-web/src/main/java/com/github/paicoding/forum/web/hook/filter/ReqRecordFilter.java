@@ -1,6 +1,7 @@
 package com.github.paicoding.forum.web.hook.filter;
 
 import cn.hutool.core.date.StopWatch;
+import cn.hutool.extra.spring.SpringUtil;
 import com.github.paicoding.forum.api.model.context.ReqInfoContext;
 import com.github.paicoding.forum.core.async.AsyncUtil;
 import com.github.paicoding.forum.core.mdc.MdcUtil;
@@ -8,11 +9,7 @@ import com.github.paicoding.forum.core.util.CrossUtil;
 import com.github.paicoding.forum.core.util.EnvUtil;
 import com.github.paicoding.forum.core.util.IpUtil;
 import com.github.paicoding.forum.core.util.SessionUtil;
-import com.github.paicoding.forum.core.util.SpringUtil;
-import com.github.paicoding.forum.service.sitemap.service.impl.SitemapServiceImpl;
-import com.github.paicoding.forum.service.statistics.service.StatisticsSettingService;
 import com.github.paicoding.forum.service.user.service.LoginService;
-import com.github.paicoding.forum.web.global.GlobalInitService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -52,11 +49,11 @@ public class ReqRecordFilter implements Filter {
      */
     private static final String GLOBAL_TRACE_ID_HEADER = "g-trace-id";
 
-    @Autowired
-    private GlobalInitService globalInitService;
-
-    @Autowired
-    private StatisticsSettingService statisticsSettingService;
+//    @Autowired
+//    private GlobalInitService globalInitService;
+//
+//    @Autowired
+//    private StatisticsSettingService statisticsSettingService;
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -81,7 +78,7 @@ public class ReqRecordFilter implements Filter {
             stopWatch.start("输出请求日志");
             buildRequestLog(ReqInfoContext.getReqInfo(), request, System.currentTimeMillis() - start);
             // 一个链路请求完毕，清空MDC相关的变量(如GlobalTraceId，用户信息)
-            MdcUtil.clear();
+//            MdcUtil.clear();
             ReqInfoContext.clear();
             stopWatch.stop();
 
@@ -133,13 +130,13 @@ public class ReqRecordFilter implements Filter {
 
             stopWatch.start("登录用户信息");
             // 初始化登录信息
-            globalInitService.initLoginUser(reqInfo);
+//            globalInitService.initLoginUser(reqInfo);
             stopWatch.stop();
 
             ReqInfoContext.addReqInfo(reqInfo);
             stopWatch.start("pv/uv站点统计");
             // 更新uv/pv计数
-            AsyncUtil.execute(() -> SpringUtil.getBean(SitemapServiceImpl.class).saveVisitInfo(reqInfo.getClientIp(), reqInfo.getPath()));
+//            AsyncUtil.execute(() -> SpringUtil.getBean(SitemapServiceImpl.class).saveVisitInfo(reqInfo.getClientIp(), reqInfo.getPath()));
             stopWatch.stop();
 
             stopWatch.start("回写traceId");
@@ -185,7 +182,7 @@ public class ReqRecordFilter implements Filter {
         REQ_LOG.info("{}", msg);
 
         // 保存请求计数
-        statisticsSettingService.saveRequestCount(req.getClientIp());
+//        statisticsSettingService.saveRequestCount(req.getClientIp());
     }
 
 

@@ -1,12 +1,5 @@
 package com.github.paicoding.forum.web;
 
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.paicoding.forum.core.util.SocketUtil;
-import com.github.paicoding.forum.core.util.SpringUtil;
-import com.github.paicoding.forum.web.config.GlobalViewConfig;
-import com.github.paicoding.forum.web.global.ForumExceptionHandler;
-import com.github.paicoding.forum.web.hook.interceptor.GlobalViewInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -39,53 +32,56 @@ import java.util.List;
 @EnableCaching
 @ServletComponentScan
 @SpringBootApplication
-public class QuickForumApplication implements WebMvcConfigurer, ApplicationRunner {
+public class QuickForumApplication implements WebMvcConfigurer {
     @Value("${server.port:8080}")
     private Integer webPort;
 
-    @Resource
-    private GlobalViewInterceptor globalViewInterceptor;
+//    @Resource
+//    private GlobalViewInterceptor globalViewInterceptor;
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(globalViewInterceptor).addPathPatterns("/**");
-    }
-
-    @Override
-    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-        resolvers.add(0, new ForumExceptionHandler());
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(globalViewInterceptor).addPathPatterns("/**");
+//    }
+//
+//    @Override
+//    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+//        resolvers.add(0, new ForumExceptionHandler());
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(QuickForumApplication.class, args);
     }
+
+
+
 
     /**
      * 兼容本地启动时8080端口被占用的场景; 只有dev启动方式才做这个逻辑
      *
      * @return
      */
-    @Bean
-    @ConditionalOnExpression(value = "#{'dev'.equals(environment.getProperty('env.name'))}")
-    public TomcatConnectorCustomizer customServerPortTomcatConnectorCustomizer() {
-        // 开发环境时，首先判断8080d端口是否可用；若可用则直接使用，否则选择一个可用的端口号启动
-        int port = SocketUtil.findAvailableTcpPort(8000, 10000, webPort);
-        if (port != webPort) {
-            log.info("默认端口号{}被占用，随机启用新端口号: {}", webPort, port);
-            webPort = port;
-        }
-        return connector -> connector.setPort(port);
-    }
-
-    @Override
-    public void run(ApplicationArguments args) {
-        // 设置类型转换, 主要用于mybatis读取varchar/json类型数据据，并写入到json格式的实体Entity中
-        JacksonTypeHandler.setObjectMapper(new ObjectMapper());
-        // 应用启动之后执行
-        GlobalViewConfig config = SpringUtil.getBean(GlobalViewConfig.class);
-        if (webPort != null) {
-            config.setHost("http://127.0.0.1:" + webPort);
-        }
-        log.info("启动成功，点击进入首页: {}", config.getHost());
-    }
+//    @Bean
+//    @ConditionalOnExpression(value = "#{'dev'.equals(environment.getProperty('env.name'))}")
+//    public TomcatConnectorCustomizer customServerPortTomcatConnectorCustomizer() {
+//        // 开发环境时，首先判断8080d端口是否可用；若可用则直接使用，否则选择一个可用的端口号启动
+//        int port = SocketUtil.findAvailableTcpPort(8000, 10000, webPort);
+//        if (port != webPort) {
+//            log.info("默认端口号{}被占用，随机启用新端口号: {}", webPort, port);
+//            webPort = port;
+//        }
+//        return connector -> connector.setPort(port);
+//    }
+//
+//    @Override
+//    public void run(ApplicationArguments args) {
+//        // 设置类型转换, 主要用于mybatis读取varchar/json类型数据据，并写入到json格式的实体Entity中
+//        JacksonTypeHandler.setObjectMapper(new ObjectMapper());
+//        // 应用启动之后执行
+//        GlobalViewConfig config = SpringUtil.getBean(GlobalViewConfig.class);
+//        if (webPort != null) {
+//            config.setHost("http://127.0.0.1:" + webPort);
+//        }
+//        log.info("启动成功，点击进入首页: {}", config.getHost());
+//    }
 }

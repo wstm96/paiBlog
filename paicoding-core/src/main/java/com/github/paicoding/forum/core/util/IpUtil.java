@@ -1,7 +1,7 @@
 package com.github.paicoding.forum.core.util;
 
 import com.github.hui.quick.plugin.base.file.FileWriteUtil;
-import com.github.paicoding.forum.core.region.IpRegionInfo;
+//import com.github.paicoding.forum.core.region.IpRegionInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -208,24 +208,24 @@ public class IpUtil {
      * @param ip
      * @return
      */
-    public static IpRegionInfo getLocationByIp(String ip) {
-        // 2、使用全局的 vIndex 创建带 VectorIndex 缓存的查询对象。
-        initVIndex();
-        Searcher searcher = null;
-        try {
-            searcher = Searcher.newWithVectorIndex(tmpPath, vIndex);
-            return new IpRegionInfo(searcher.search(ip));
-        } catch (Exception e) {
-            log.error("failed to create vectorIndex cached searcher with {}: {}\n", dbPath, e);
-            return new IpRegionInfo("");
-        } finally {
-            if (searcher != null) {
-                try {
-                    searcher.close();
-                } catch (IOException e) {
-                    log.error("failed to close file:{}\n", dbPath, e);
-                }
-            }
-        }
-    }
+//    public static IpRegionInfo getLocationByIp(String ip) {
+//        // 2、使用全局的 vIndex 创建带 VectorIndex 缓存的查询对象。
+//        initVIndex();
+//        Searcher searcher = null;
+//        try {
+//            searcher = Searcher.newWithVectorIndex(tmpPath, vIndex);
+//            return new IpRegionInfo(searcher.search(ip));
+//        } catch (Exception e) {
+//            log.error("failed to create vectorIndex cached searcher with {}: {}\n", dbPath, e);
+//            return new IpRegionInfo("");
+//        } finally {
+//            if (searcher != null) {
+//                try {
+//                    searcher.close();
+//                } catch (IOException e) {
+//                    log.error("failed to close file:{}\n", dbPath, e);
+//                }
+//            }
+//        }
+//    }
 }

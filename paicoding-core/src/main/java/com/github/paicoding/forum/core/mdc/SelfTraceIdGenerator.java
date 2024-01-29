@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
-import java.net.InetAddress;
 import java.time.Instant;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +43,7 @@ public class SelfTraceIdGenerator {
             // 1. IP - 8
             traceId.append(convertIp(IpUtil.getLocalIp4Address())).append(".");
             // 2. 时间戳 - 13
+
             traceId.append(Instant.now().toEpochMilli()).append(".");
             // 3. 当前进程号 - 5
             traceId.append(getProcessId());
@@ -95,8 +96,9 @@ public class SelfTraceIdGenerator {
         System.out.println(t);
         String t2 = generate();
         System.out.println(t2);
+        System.out.println(UUID.randomUUID().toString().replaceAll("-", ""));
 
-        String trace = SkyWalkingTraceIdGenerator.generate();
-        System.out.println(trace);
+//        String trace = SkyWalkingTraceIdGenerator.generate();
+//        System.out.println(trace);
     }
 }

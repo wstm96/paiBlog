@@ -1,7 +1,6 @@
 package com.github.paicoding.forum.core.util;
 
 import javax.net.ServerSocketFactory;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.Random;
 
